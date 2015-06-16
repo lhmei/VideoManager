@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">VideoManager</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="count_down">5秒进入倒计时,进入视频</string>
+    <string name="quit">退出</string>
+
+</resources>
