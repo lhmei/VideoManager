@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceView;
+import android.widget.Toast;
 
 import com.bairuitech.anychat.AnyChatBaseEvent;
 import com.bairuitech.anychat.AnyChatCoreSDK;
@@ -97,10 +98,20 @@ public class VideoActivity extends Activity implements AnyChatBaseEvent, AnyChat
 	@Override
 	public void OnAnyChatVideoCallEvent(int dwEventType, int dwUserId,
 			int dwErrorCode, int dwFlags, int dwParam, String userStr) {
-		if(3 == dwEventType){
-			mAnychat.EnterRoom(dwParam, "");
-		}
 		Log.e("VideoActivity", dwEventType+"");
+		//mAnychat.EnterRoom(dwParam, "");
+		switch(dwEventType){
+		case AnyChatDefine.BRAC_VIDEOCALL_EVENT_REPLY:
+			messageHandle(dwErrorCode, dwParam);
+			break;
+		case AnyChatDefine.BRAC_VIDEOCALL_EVENT_START:
+			Log.e("VideoActivity", dwEventType+"");
+			break;
+		case AnyChatDefine.BRAC_VIDEOCALL_EVENT_FINISH:
+			finish();
+			Log.e("VideoActivity", dwEventType+"");
+			break;
+		}
 	}
 
 	@Override
@@ -148,7 +159,39 @@ public class VideoActivity extends Activity implements AnyChatBaseEvent, AnyChat
 		mAnychat.UserSpeakControl(mTargetUser, 0);
 		mAnychat.UserCameraControl(-1, 0);
 		mAnychat.UserSpeakControl(-1, 0);
+		finish();
 		
+	}
+	
+	private void messageHandle(int errorCode, int roomId){
+		switch(errorCode){
+		case AnyChatDefine.BRAC_ERRORCODE_SESSION_BUSY:
+			Toast.makeText(this, R.string.session_busy, Toast.LENGTH_SHORT).show();
+			finish();
+			break;
+		case AnyChatDefine.BRAC_ERRORCODE_SESSION_DISCONNECT:
+			Toast.makeText(this, R.string.session_disconnect, Toast.LENGTH_SHORT).show();
+			finish();
+			break;
+		case AnyChatDefine.BRAC_ERRORCODE_SESSION_OFFLINE:
+			Toast.makeText(this, R.string.session_offline, Toast.LENGTH_SHORT).show();
+			finish();
+			break;
+		case AnyChatDefine.BRAC_ERRORCODE_SESSION_QUIT:
+			Toast.makeText(this, R.string.session_quit, Toast.LENGTH_SHORT).show();
+			finish();
+			break;
+		case AnyChatDefine.BRAC_ERRORCODE_SESSION_REFUSE:
+			Toast.makeText(this, R.string.session_refuse, Toast.LENGTH_SHORT).show();
+			finish();
+			break;	
+		case AnyChatDefine.BRAC_ERRORCODE_SESSION_TIMEOUT:
+			Toast.makeText(this, R.string.session_timeout, Toast.LENGTH_SHORT).show();
+			finish();
+			break;
+		case AnyChatDefine.BRAC_ERRORCODE_SUCCESS:
+			mAnychat.EnterRoom(roomId, "");
+		}
 	}
 
 }
